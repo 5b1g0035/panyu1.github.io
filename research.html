@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>我的專業技能</title>
+  <style>
+    body {
+      font-family: "Microsoft JhengHei", sans-serif;
+      background-color: #e6f0ff;
+      padding: 30px;
+      color: #333;
+    }
+    h1 {
+      text-align: center;
+      color: #1a3d99;
+      margin-bottom: 40px;
+    }
+    .skill {
+      margin-bottom: 25px;
+    }
+    .skill-name {
+      font-weight: 700;
+      font-size: 1.2rem;
+      margin-bottom: 6px;
+      color: #004080;
+    }
+    .progress-bar {
+      background-color: #d0e7ff;;
+      border-radius: 10px;
+      overflow: hidden;
+      height: 20px;
+      width: 100%;
+      max-width: 400px;
+    }
+    .progress-fill {
+      background-color: #3366ff;
+      height: 100%;
+      width: 0%;
+      border-radius: 10px;
+      transition: width 1s ease-in-out;
+    }
+    .description {
+      margin-top: 6px;
+      font-size: 0.9rem;
+      color: #555;
+      max-width: 400px;
+    }
+  </style>
+</head>
+<body>
+    <a href="all.html">← 回首頁</a>
+  <h1>我的專業技能</h1>
+
+  <div class="skill">
+    <div class="skill-name">JavaScript</div>
+    <div class="progress-bar"><div class="progress-fill" style="width: 15%;"></div></div>
+    <div class="description">熟悉 ES6+，能夠使用 React 進行 SPA 開發。</div>
+  </div>
+
+
+  <div class="skill">
+    <div class="skill-name">HTML & CSS</div>
+    <div class="progress-bar"><div class="progress-fill" style="width: 35%;"></div></div>
+    <div class="description">熟練製作響應式網頁設計與版面排版。</div>
+  </div>
+<div class="skill">
+  <div class="skill-name">加起來得不熟悉度</div>
+  <div class="progress-bar"><div class="progress-fill" style="width: 85%; background-color: #f21e1e;"></div></div>
+  <div class="description">目前剛接觸中，正在學習基本語法與邏輯結構。</div>
+</div>
+
+
+  <script>
+    // 動畫效果，讓進度條從 0 慢慢長到指定寬度
+    window.onload = () => {
+      const fills = document.querySelectorAll('.progress-fill');
+      fills.forEach(fill => {
+        const width = fill.style.width;
+        fill.style.width = '0%';
+        setTimeout(() => {
+          fill.style.width = width;
+        }, 200);
+      });
+    };
+  </script>
+</body>
+</html>

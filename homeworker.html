@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <title>作業</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      text-align: center;
+      background-color:  #d0e7ff;;
+      padding: 20px;
+    }
+
+    a {
+      display: inline-block;
+      margin-bottom: 20px;
+      text-decoration: none;
+      color: #0077cc;
+      font-weight: bold;
+    }
+
+    .tab {
+      margin: 10px;
+      padding: 10px 20px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    .section {
+      display: none;
+      margin-top: 30px;
+    }
+
+    .section.active {
+      display: block;
+    }
+
+    /* 9宮格計算機樣式 */
+    .calculator-9grid {
+      width: 240px;
+      margin: 0 auto;
+      background-color: #222;
+      border-radius: 10px;
+      padding: 10px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    }
+
+    .operators button {
+  flex: 1;
+  padding: 15px 0; /* 與數字按鈕相同 */
+  font-size: 1.2rem;
+  border-radius: 6px;
+  background-color: #eee;
+  cursor: pointer;
+  border: none;
+}
+
+.operators button:hover {
+  background-color: #dde66d;
+}
+
+
+    .display {
+      background-color: #000;
+      color: #0f0;
+      font-size: 2rem;
+      text-align: right;
+      padding: 15px;
+      border-radius: 6px;
+      margin-bottom: 10px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+
+    .operators {
+      display: flex;
+      gap: 10px;
+      justify-content: space-between;
+    }
+
+    button {
+      padding: 15px 0;
+      font-size: 1.2rem;
+      border: none;
+      border-radius: 6px;
+      background-color: #eee;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #dd7f7f;
+    }
+
+    /* 水排序遊戲樣式 */
+    .game {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      flex-wrap: wrap;
+      margin-top: 20px;
+    }
+
+    .tube {
+      width: 60px;
+      height: 240px;
+      background: #ccc;
+      border-radius: 10px;
+      border: 2px solid #888;
+      display: flex;
+      flex-direction: column-reverse;
+      cursor: pointer;
+    }
+
+    .layer {
+      height: 25%;
+      width: 100%;
+      border-top: 1px solid #aaa;
+      box-sizing: border-box;
+    }
+
+    .color-red { background-color: #ff4d4d; }
+    .color-blue { background-color: #4da6ff; }
+    .color-green { background-color: #4dff4d; }
+
+    #message {
+      margin-top: 10px;
+      font-size: 1.1em;
+      color: green;
+    }
+  </style>
+</head>
+<body>
+  <a href="all.html">← 回首頁</a>
+  <h1>作業們</h1>
+
+  <!-- 功能切換按鈕 -->
+  <div>
+    <button class="tab" onclick="showSection('tableSection')">計算機</button>
+    <button class="tab" onclick="showSection('puzzleSection')">Water Puzzle</button>
+  </div>
+
+  <!-- 🔢 9宮格簡易計算機區塊 -->
+  <div id="tableSection" class="section active">
+    <h2>9 宮格簡易計算機</h2>
+    <div class="calculator-9grid">
+      <div class="display" id="display">0</div>
+      <div class="grid">
+        <button onclick="press('7')">7</button>
+        <button onclick="press('8')">8</button>
+        <button onclick="press('9')">9</button>
+
+        <button onclick="press('4')">4</button>
+        <button onclick="press('5')">5</button>
+        <button onclick="press('6')">6</button>
+
+        <button onclick="press('1')">1</button>
+        <button onclick="press('2')">2</button>
+        <button onclick="press('3')">3</button>
+
+        <button onclick="press('C')">C</button>
+        <button onclick="press('0')">0</button>
+        <button onclick="press('=')">＝</button>
+      </div>
+      
+      <div class="operators">
+        <button onclick="setOperator('+')">＋</button>
+        <button onclick="setOperator('-')">－</button>
+        <button onclick="setOperator('*')">×</button>
+        <button onclick="setOperator('/')">÷</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 💧 水排序遊戲區塊 -->
+  <div id="puzzleSection" class="section">
+    <h2>Water Sort Puzzle</h2>
+    <div class="game" id="game"></div>
+    <div id="message"></div>
+  </div>
+
+  <!-- JavaScript -->
+  <script>
+    // 分頁切換功能
+    function showSection(id) {
+      document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+      document.getElementById(id).classList.add('active');
+    }
+
+    // === 計算機邏輯 ===
+    let currentInput = '';
+    let operator = '';
+    let previousValue = '';
+
+    function press(num) {
+      const display = document.getElementById('display');
+
+      if (num === 'C') {
+        currentInput = '';
+        operator = '';
+        previousValue = '';
+        display.textContent = '0';
+        return;
+      }
+
+      if (num === '=') {
+        if (previousValue !== '' && operator && currentInput !== '') {
+          const result = eval(`${previousValue}${operator}${currentInput}`);
+          display.textContent = result;
+          currentInput = result.toString();
+          previousValue = '';
+          operator = '';
+        }
+        return;
+      }
+
+      currentInput += num;
+      display.textContent = currentInput;
+    }
+
+    function setOperator(op) {
+      if (currentInput === '') return;
+      operator = op;
+      previousValue = currentInput;
+      currentInput = '';
+    }
+
+    // === Water Sort Puzzle 遊戲 ===
+    const colors = ['red', 'blue', 'green'];
+    const tubes = [
+      ['red', 'blue', 'green', 'red'],
+      ['green', 'blue', 'red', 'green'],
+      ['blue', 'red', 'green', 'blue'],
+      [],
+      []
+    ];
+
+    let selectedTube = null;
+
+    function renderGame() {
+      const gameDiv = document.getElementById('game');
+      gameDiv.innerHTML = '';
+      tubes.forEach((tube, index) => {
+        const tubeDiv = document.createElement('div');
+        tubeDiv.className = 'tube';
+        tubeDiv.dataset.index = index;
+
+        for (let i = 0; i < 4; i++) {
+          const color = tube[i];
+          const layer = document.createElement('div');
+          layer.className = 'layer';
+          if (color) layer.classList.add(`color-${color}`);
+          tubeDiv.appendChild(layer);
+        }
+
+        tubeDiv.addEventListener('click', () => handleTubeClick(index));
+        gameDiv.appendChild(tubeDiv);
+      });
+    }
+
+    function handleTubeClick(index) {
+      if (selectedTube === null) {
+        selectedTube = index;
+      } else {
+        if (selectedTube !== index) {
+          tryPour(selectedTube, index);
+        }
+        selectedTube = null;
+      }
+      renderGame();
+      checkWin();
+    }
+
+    function tryPour(from, to) {
+      const fromTube = tubes[from];
+      const toTube = tubes[to];
+      if (fromTube.length === 0 || toTube.length >= 4) return;
+
+      const topColor = fromTube[fromTube.length - 1];
+      let count = 1;
+      for (let i = fromTube.length - 2; i >= 0; i--) {
+        if (fromTube[i] === topColor) count++;
+        else break;
+      }
+
+      const toTopColor = toTube[toTube.length - 1];
+      if (toTube.length === 0 || toTopColor === topColor) {
+        let pourCount = 0;
+        while (pourCount < count && toTube.length < 4 && fromTube[fromTube.length - 1] === topColor) {
+          toTube.push(fromTube.pop());
+          pourCount++;
+        }
+      }
+    }
+
+    function checkWin() {
+      const win = tubes.every(tube =>
+        tube.length === 0 || (tube.length === 4 && new Set(tube).size === 1)
+      );
+      document.getElementById('message').textContent = win ? '恭喜完成遊戲！' : '';
+    }
+
+    // 初始載入遊戲畫面
+    renderGame();
+  </script>
+</body>
+</html>
